@@ -42,7 +42,7 @@ public class Thermometre extends View {
         int blue = 255 - red;
         int green = (int) (128 - Math.abs(tempRatio - 0.5) * 256);
 
-//        Use the right color and adjust line's width
+        // Use the right color and adjust line's width
         @SuppressLint("DrawAllocation") Paint p = new Paint();
         p.setColor(Color.rgb(red, green, blue));
         p.setStrokeWidth(strokeWidth);
@@ -53,6 +53,7 @@ public class Thermometre extends View {
         float yEnd = getHeight() - margin;
         float centerX = getWidth() / 2.0f;
 
+        // Draw the thermometer's line and bulb
         canvas.drawLine(centerX, yStart, centerX, yEnd, p);
         canvas.drawCircle(centerX, getHeight() - margin, radius, p);
     }
