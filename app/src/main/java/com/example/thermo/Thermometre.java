@@ -12,7 +12,7 @@ public class Thermometre extends View {
 
     public Thermometre(Context context) {
         super(context);
-        this.temp = 0.0f; // Initial temp
+        this.temp = 0.0f;
     }
 
     public Thermometre(Context context, float temp) {
@@ -22,7 +22,7 @@ public class Thermometre extends View {
 
     public void setTemp(float temp) {
         this.temp = temp;
-        invalidate(); // Request a redraw
+        invalidate();
     }
 
     @Override
@@ -30,7 +30,7 @@ public class Thermometre extends View {
         super.onDraw(canvas);
 
         // Dimensions of the view
-        float radius = getWidth() / 12f; // Reduced bulb size
+        float radius = getWidth() / 12f;
         float strokeWidth = getWidth() / 50f;
         float margin = radius * 2;
 
@@ -48,7 +48,7 @@ public class Thermometre extends View {
         // Adjust the text size for the numbers
         Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(radius * 1.2f); // Increased text size for better legibility
+        textPaint.setTextSize(radius * 1.2f);
 
         // Position of the thermometer elements based on temperature
         float heightRatio = tempRatio;
@@ -69,7 +69,7 @@ public class Thermometre extends View {
             float yMark = (getHeight() - margin) * (1 - i / 10f) + margin / 2;
             canvas.drawLine(centerX - radius * 1.5f, yMark, centerX - radius * 2.5f, yMark, linePaint);
             canvas.drawLine(centerX + radius * 1.5f, yMark, centerX + radius * 2.5f, yMark, linePaint);
-            canvas.drawText(String.valueOf(i * 10), centerX - radius * 5f, yMark + radius / 4, textPaint); // Adjusted position for bigger text
+            canvas.drawText(String.valueOf(i * 10), centerX - radius * 5f, yMark + radius / 4, textPaint);
         }
     }
 }
