@@ -12,8 +12,7 @@ public class Thermometre extends View {
 
     public Thermometre(Context context) {
         super(context);
-        // Initial temp
-        this.temp = 0.0f;
+        this.temp = 0.0f; // Initial temp
     }
 
     public Thermometre(Context context, float temp) {
@@ -23,7 +22,7 @@ public class Thermometre extends View {
 
     public void setTemp(float temp) {
         this.temp = temp;
-        invalidate();
+        invalidate(); // Request a redraw
     }
 
     @Override
@@ -31,30 +30,46 @@ public class Thermometre extends View {
         super.onDraw(canvas);
 
         // Dimensions of the view
-        float radius = getWidth() / 10f;
+        float radius = getWidth() / 12f; // Reduced bulb size
         float strokeWidth = getWidth() / 50f;
-        float margin = radius + strokeWidth;
+        float margin = radius * 2;
 
-        // Calculate the color depending of temperature
-        float tempNormalized = Math.max(-20, Math.min(temp, 40));
-        float tempRatio = (tempNormalized + 20) / 60;
+        // Adjusted for 0-100 range
+        float tempNormalized = Math.max(0, Math.min(temp, 100));
+        float tempRatio = tempNormalized / 100;
         int red = (int) (255 * tempRatio);
         int blue = 255 - red;
         int green = (int) (128 - Math.abs(tempRatio - 0.5) * 256);
 
-        // Use the right color and adjust line's width
-        @SuppressLint("DrawAllocation") Paint p = new Paint();
+        Paint p = new Paint();
         p.setColor(Color.rgb(red, green, blue));
         p.setStrokeWidth(strokeWidth);
 
-        // Adjust position of the depending of temperature
+        // Adjust the text size for the numbers
+        Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(radius * 1.2f); // Increased text size for better legibility
+
+        // Position of the thermometer elements based on temperature
         float heightRatio = tempRatio;
-        float yStart = (getHeight() - margin) * (1 - heightRatio) + margin;
-        float yEnd = getHeight() - margin;
+        float yStart = (getHeight() - margin) * (1 - heightRatio) + margin / 2;
+        float yEnd = getHeight() - margin / 2;
         float centerX = getWidth() / 2.0f;
 
-        // Draw the thermometer's line and bulb
+        // Draw the thermometer's mercury line and bulb
         canvas.drawLine(centerX, yStart, centerX, yEnd, p);
-        canvas.drawCircle(centerX, getHeight() - margin, radius, p);
+        canvas.drawCircle(centerX, getHeight() - margin / 2, radius, p);
+
+        // Draw markings and numbers
+        Paint linePaint = new Paint();
+        linePaint.setColor(Color.BLACK);
+        linePaint.setStrokeWidth(strokeWidth / 2);
+
+        for (int i = 0; i <= 10; i++) {
+            float yMark = (getHeight() - margin) * (1 - i / 10f) + margin / 2;
+            canvas.drawLine(centerX - radius * 1.5f, yMark, centerX - radius * 2.5f, yMark, linePaint);
+            canvas.drawLine(centerX + radius * 1.5f, yMark, centerX + radius * 2.5f, yMark, linePaint);
+            canvas.drawText(String.valueOf(i * 10), centerX - radius * 5f, yMark + radius / 4, textPaint); // Adjusted position for bigger text
+        }
     }
 }
